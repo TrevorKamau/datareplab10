@@ -3,6 +3,10 @@ const app = express()
 const port = 4000
 const cors = require('cors');
 
+const path = require('path');
+app.use(express.static(path.join(__dirname, '../build')));
+app.use('/static', express.static(path.join(__dirname, 'build//static')));
+
 
 app.use(cors());
 app.use(function(req, res, next) {
@@ -85,6 +89,10 @@ app.get('/api/book/:identifier',async (req,res)=>{
   let book = await bookModel.findById(req.params.identifier);
   res.send(book);
 })
+
+app.get('*', (req,res) =>{
+  res.sendFile(path.join(__dirname+'/../build/index.html'));
+  });
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
